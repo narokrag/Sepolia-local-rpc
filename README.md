@@ -3,7 +3,6 @@
 Script Bash sederhana untuk:
 - Mengecek apakah node lokal sudah **sinkron** dengan Sepolia public RPC
 - Mengukur **waktu respons RPC lokal dan publik**
-- (Opsional) Menyimpan hasil monitoring ke file `.csv` untuk analisis
 
 ---
 
@@ -14,13 +13,16 @@ Script Bash sederhana untuk:
   ```bash
   sudo apt update && sudo apt install -y curl jq
 
-1. Simpan script di file:
+1. Simpan script di file
+   ```bash
    nano compare_block.sh
-   #!/bin/bash
+
+```bash
+#!/bin/bash
 
 # === Konfigurasi RPC ===
 LOCAL_RPC="http://localhost:8545"
-EXPLORER_RPC="https://rpc2.sepolia.org"
+EXPLORER_RPC="https://sepolia.infura.io/v3/xxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 # === Fungsi ambil block number dan waktu ===
 get_block_and_time() {
@@ -71,4 +73,24 @@ fi
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 echo "$TIMESTAMP,$LOCAL_DEC,$LOCAL_TIME,$EXPLORER_DEC,$EXPLORER_TIME,$DIFF" >> "$LOGFILE"
 
-2 .
+```
+2. ganti rpc public dengan punyamu https://sepolia.infura.io/v3/xxxxxxxxxxxxxxxxxxxxxxxxxx
+3. lalu simpan file CTRL+X lalu tekan y kemudian ENTER
+4. Ubah menjadi executable:
+   ```bash
+   chmod +x compare_block.sh
+5. Jalankan:
+   ```bash
+   watch -n 10 ./compare_block.sh
+📊 Contoh Output
+```bash
+=========================================
+Local Node     Block: 8661802 (0x842b2a)
+                Time: 0.001323s
+Public Sepolia Block: 8661802 (0x842b2a)
+                Time: 0.445376s
+=========================================
+✅ Node kamu sudah sinkron atau hanya tertinggal 0 block.
+```
+
+6. Berhenti tekan CTRL + C
